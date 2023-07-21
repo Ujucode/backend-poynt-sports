@@ -1,4 +1,0 @@
-schemas in graph ql shoul be defined
-models including 
-    table structure
-    relationships

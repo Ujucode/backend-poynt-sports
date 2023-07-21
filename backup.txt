@@ -1,0 +1,24 @@
+subscribers name email password phone address
+
+ambiguity athlete & mentors & coaches
+
+users
+  should we seperate it bio skills language
+  bio 
+  skills enum?
+  language enum?
+
+enum?
+  sport
+  religion 
+
+playing career 
+  current previous 
+  achivements certifications
+
+
+officials details
+
+fee part only for coaches and mentos?
+
+is it necessary to take month and year seperately?

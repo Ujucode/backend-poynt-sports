@@ -1,0 +1,247 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Subscriber {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+  phone    Int
+}
+
+enum Role {
+  ATHLETE
+  COACH
+  MENTOR
+}
+
+enum Blood {
+  A
+  B
+  O
+}
+
+enum Religion {
+  Hindu
+  Muslim
+}
+
+enum Sport {
+  Akaido
+  Karate
+}
+
+enum Gender {
+  Male
+  Femal
+  Other
+}
+
+enum Level {
+  District
+  State
+  National
+}
+
+enum Event {
+  Single
+  League
+  Tournament
+  Knockout
+}
+
+// ***** ***** END OF ENUM ***** *****
+// Mani Users or Entities
+
+model User {
+  id               String             @id @default(uuid())
+  firstName        String
+  lastName         String
+  phone            Int                @unique
+  email            String             @unique
+  DOB              DateTime
+  sport            Sport
+  photo            String[]
+  gender           Gender
+  religion         Religion
+  BloodGroup       Blood
+  password         String
+  type             Role
+  currentAddress   CurrentAddress?
+  permanentAddress ParmanentAddress?
+  birthAddress     BirthAddress?
+  education        Education[]
+  bankAccount      BankAccountDetail?
+  playingCareer    PlayingCareer?
+  achivement       Achivement[]
+  otherInformation OtherInformation?
+  fee              Fee?
+}
+
+model Institute {
+  id String @id @default(uuid())
+  // include the basic info fields here it self
+}
+
+// other information of athlete/coach
+
+model OtherInformation {
+  id        Int      @id @default(autoincrement())
+  bio       String
+  Skills    String[]
+  languages String[]
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id   String   @unique
+}
+
+// ***** Addresses *****
+model CurrentAddress {
+  current_address_id String @id @default(uuid())
+  addressLine        String
+  city               String
+  district           String
+  state              String
+  pincode            Int
+  country            String
+  user               User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId             String @unique
+}
+
+model ParmanentAddress {
+  parmanent_address_id String @id @default(uuid())
+  addressLine          String
+  city                 String
+  district             String
+  state                String
+  pincode              Int
+  country              String
+  user                 User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId               String @unique
+}
+
+model BirthAddress {
+  birth_address_id String @id @default(uuid())
+  city             String
+  district         String
+  state            String
+  country          String
+  user             User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId           String @unique
+}
+
+// ***** END OF ADDRESS *****
+model Education {
+  education_id String   @id @default(uuid())
+  institute    String
+  degree       String
+  fieldOfStudy String
+  start_date   DateTime
+  end_date     DateTime
+  Grade        String
+  student      User     @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  studentId    String   @unique
+}
+
+// // ***** PLAYING DETAILS *****
+
+enum Career {
+  Current
+  Previous
+}
+
+model PlayingCareer {
+  playingCareer    User     @relation(fields: [playingCareer_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  playingCareer_id String   @unique
+  highest_level    Level
+  careerType       Career
+  playedFor        String[]
+
+  @@unique([playingCareer_id, careerType])
+}
+
+model PlayedFor {
+  id          String   @id @default(uuid())
+  played_for  String
+  level       Level
+  played_from DateTime
+  played_to   DateTime
+}
+
+// model previousGame {
+
+// }
+
+model Achivement {
+  achivement_id String   @id @default(uuid())
+  name_of_event String
+  event         Event
+  level         Level
+  position      Int
+  organised_by  String
+  event_date    DateTime
+  player        User     @relation(fields: [player_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  player_id     String   @unique
+}
+
+// model Certification {
+
+// }
+
+// // *** Only for Athletes ****
+// model CurrentPlay {   
+
+// }
+
+// model Participation {
+
+// }
+
+// // ***** COACHING DETAILS ( Only for Coaches ) *****
+// model CoachingCareer {
+
+// }
+
+// model previousCoaching {
+
+// }
+
+// model CurrentCoaching {
+
+// }
+
+// // ***** END *****
+
+// Fee of mentor and coach
+
+model Fee {
+  fee              User     @relation(fields: [fee_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  fee_id           String   @unique
+  coaching_level   Level
+  fee_type         String
+  numer_of_classes Int
+  duration         DateTime
+}
+
+model BankAccountDetail {
+  account_holder  String
+  account_number  Int    
+  bank_name       String
+  branch_name     String
+  IFSC_code       String 
+  userId          String @unique
+  user            User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+// // ***** ***** END OF BASIC INFO  OF ATHLETES/COACHES ***** *****
+
+// // Information on training institutes/clubs
+
+// // Venue Booking
+
+// // Event Booking
