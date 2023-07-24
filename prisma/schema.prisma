@@ -22,8 +22,8 @@ enum Role {
 }
 
 enum Blood {
-  A
-  B
+  A_positive
+  B_positive
   O
 }
 
@@ -73,15 +73,13 @@ model User {
   BloodGroup       Blood
   password         String
   type             Role
-  currentAddress   CurrentAddress?
-  permanentAddress ParmanentAddress?
-  birthAddress     BirthAddress?
-  education        Education[]
-  bankAccount      BankAccountDetail?
-  playingCareer    PlayingCareer?
-  achivement       Achivement[]
   otherInformation OtherInformation?
+  address          User_address[]
+  education        Education[]
+  playingCareer    PlayingCareer[]
+  achivement       Achivement[]
   fee              Fee?
+  bankAccount      BankAccountDetail?
 }
 
 model Institute {
@@ -90,49 +88,55 @@ model Institute {
 }
 
 // other information of athlete/coach
+enum Skill {
+  Time_Management
+}
+
+enum Language {
+  Hindi
+  English
+  Assames
+}
 
 model OtherInformation {
-  id        Int      @id @default(autoincrement())
-  bio       String
-  Skills    String[]
-  languages String[]
-  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  user_id   String   @unique
+  id       Int        @id @default(autoincrement())
+  bio      String
+  skill    Skill[]
+  language Language[]
+  user     User       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id  String     @unique
 }
 
 // ***** Addresses *****
-model CurrentAddress {
-  current_address_id String @id @default(uuid())
-  addressLine        String
-  city               String
-  district           String
-  state              String
-  pincode            Int
-  country            String
-  user               User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId             String @unique
+
+enum AddressType {
+  Current
+  Previous
+  Birth
 }
 
-model ParmanentAddress {
-  parmanent_address_id String @id @default(uuid())
-  addressLine          String
-  city                 String
-  district             String
-  state                String
-  pincode              Int
-  country              String
-  user                 User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId               String @unique
+// temporery address table
+
+model User_address {
+  address_type AddressType
+  user         User        @relation(fields: [userId], references: [id])
+  userId       String
+  address      Addresses   @relation(fields: [address_id], references: [address_id])
+  address_id   String
+
+  @@unique([userId, address_id, address_type])
 }
 
-model BirthAddress {
-  birth_address_id String @id @default(uuid())
-  city             String
-  district         String
-  state            String
-  country          String
-  user             User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId           String @unique
+model Addresses {
+  address_id   String         @id @default(uuid())
+  // address_type AddressType
+  addressLine  String
+  city         String
+  district     String
+  state        String
+  pincode      Int
+  country      String
+  user_address User_address[]
 }
 
 // ***** END OF ADDRESS *****
@@ -145,7 +149,7 @@ model Education {
   end_date     DateTime
   Grade        String
   student      User     @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  studentId    String   @unique
+  studentId    String
 }
 
 // // ***** PLAYING DETAILS *****
@@ -155,22 +159,25 @@ enum Career {
   Previous
 }
 
+// temporary table for playing career
 model PlayingCareer {
-  playingCareer    User     @relation(fields: [playingCareer_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  playingCareer_id String   @unique
-  highest_level    Level
-  careerType       Career
-  playedFor        String[]
+  user          User      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id       String
+  playedFor     PlayedFor @relation(fields: [played_for_id], references: [id])
+  played_for_id String
+  highest_level Level
+  careerType    Career
 
-  @@unique([playingCareer_id, careerType])
+  @@unique([user_id, played_for_id, careerType])
 }
 
 model PlayedFor {
-  id          String   @id @default(uuid())
-  played_for  String
-  level       Level
-  played_from DateTime
-  played_to   DateTime
+  id            String          @id @default(uuid())
+  played_for    String
+  level         Level
+  played_from   DateTime
+  played_to     DateTime
+  playingCareer PlayingCareer[]
 }
 
 // model previousGame {
@@ -229,13 +236,13 @@ model Fee {
 }
 
 model BankAccountDetail {
-  account_holder  String
-  account_number  Int    
-  bank_name       String
-  branch_name     String
-  IFSC_code       String 
-  userId          String @unique
-  user            User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  account_holder String
+  account_number Int
+  bank_name      String
+  branch_name    String
+  IFSC_code      String
+  userId         String @unique
+  user           User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 // // ***** ***** END OF BASIC INFO  OF ATHLETES/COACHES ***** *****
