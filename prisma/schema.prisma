@@ -23,18 +23,125 @@ enum Role {
 
 enum Blood {
   A_positive
+  A_negative
   B_positive
-  O
+  B_negative
+  O_positive
+  O_negative
+  AB_positive
+  AB_negative
 }
 
 enum Religion {
   Hindu
+  Buddhist
+  Christian
   Muslim
+  Jain
+  Jew
+  Sikh
+  Judaism
+  Athesists
+  Other
 }
 
 enum Sport {
-  Akaido
+  Aikido
+  Archery
+  Arm_Wrestling
+  Badminton
+  Baseball
+  Basketball
+  Belt_Wrestling
+  Billiards
+  BMX_Racing
+  Body_Building
+  Boffer_Combat
+  Bokator
+  Bowling
+  Boxing
+  Break_Dance
+  Canoe
+  Carrom_Sport
+  Chess
+  Chess_Boxing
+  Cricket
+  Cross_Country_Running
+  Curling
+  Discus_Throw
+  Diving
+  Fencing
+  Football
+  Freestyle_Wrestling
+  Futsal
+  Golf
+  Gymnastics
+  Half_Marathon
+  Hammer_Throw
+  Handball
+  Hapkido
+  High_Jump
+  Hockey
+  Horse_Riding
+  Hurdle_Race
+  Javelin_Throw
+  Jijutsu
+  Judo
+  Kabaddi
+  Kalaripayattu
   Karate
+  Kendo
+  Kho_Kho
+  Kung_Fu
+  Lacrosse
+  Lawn_Bowls
+  Long_Jump
+  Long_Tennis
+  Marathon_Running
+  Mixed_Martial_Arts
+  Mountaineering
+  Muaythi
+  Pillow_Fight
+  Pole_Dancing
+  Pole_Vault
+  Polo
+  Relay_Race
+  Road_Cycling
+  Rock_Climbing
+  Roller_Skating
+  Rowing
+  Rugby
+  Running
+  Sailing
+  Sambo
+  Shooting
+  Shot_Put
+  Skateboarding
+  Skating
+  Ski_Jumping
+  Snowboaring
+  Softball
+  Squash
+  Stick_Combat
+  Sumo_Wrestling
+  Surfing
+  Swimming
+  Sword_Combat
+  Table_Tennis
+  Taekwondo
+  Track_Cycling
+  Trampoline
+  Triathlon
+  Triple_Jump
+  Tug_of_War
+  Ultramarathon
+  Volleyball
+  Water_Polo
+  Weightlifting
+  Wrestling
+  Wushu
+  Yoga
+  Zumba
 }
 
 enum Gender {
@@ -63,7 +170,7 @@ model User {
   id               String             @id @default(uuid())
   firstName        String
   lastName         String
-  phone            Int                @unique
+  phone            String                @unique
   email            String             @unique
   DOB              DateTime
   sport            Sport
