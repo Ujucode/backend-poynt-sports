@@ -164,13 +164,12 @@ enum Event {
 }
 
 // ***** ***** END OF ENUM ***** *****
-// Mani Users or Entities
 
 model User {
   id               String             @id @default(uuid())
   firstName        String
   lastName         String
-  phone            String                @unique
+  phone            String             @unique
   email            String             @unique
   DOB              DateTime
   sport            Sport

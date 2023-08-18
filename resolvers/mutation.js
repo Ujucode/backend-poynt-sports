@@ -18,6 +18,7 @@ const Mutation = {
             }
         })
     }
+    // create Education detail mutation
 }
 
 module.exports = { Mutation }

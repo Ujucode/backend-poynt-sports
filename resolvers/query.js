@@ -1,3 +1,5 @@
+const { prisma } = require('../database')
+
 const Query = {
     basicUserInfo: (parent, args, context, info)=>{
         return { 
@@ -11,7 +13,7 @@ const Query = {
             gender: 'Male',
             religion: 'Hindu',
             BloodGroup: 'B_positive',
-            type: 'Athlet'
+            type: 'ATHLETE'
             }
         },
 }
